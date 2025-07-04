@@ -985,7 +985,7 @@
         <div class="footer-section">
           <h3>KAJICHEF</h3>
           <p>プレミアム家事代行サービス<br>あなたの時間を最大化します</p>
-        </div>
+        </div>評価
         <div class="footer-section">
           <h3>お問い合わせ</h3>
           <p>📞 <a href="tel:+8108088989915" onclick="trackContact('phone')">080-8898-9915</a></p>
@@ -1054,51 +1054,113 @@
         });
       };
 
-      // 口コミ投稿処理
-      window.submitReview = function (event) {
-        event.preventDefault();
-        const name = document.getElementById('reviewName').value.trim();
-        const title = document.getElementById('reviewTitle').value.trim();
-        const text = document.getElementById('reviewText').value.trim();
-        // バリデーション
-        if (!name) {
-          alert('お名前を入力してください。');
-          return false;
-        }
-        if (!text) {
-          alert('感想を入力してください。');
-          return false;
-        }
-        if (selectedRating === 0) {
-          alert('評価を選択してください。');
-          return false;
-        }
-        // 新しい口コミカードを作成
+      window.addReviewToPage = function (name, title, text, rating) {
         const reviewsGrid = document.getElementById('reviewsGrid');
         const newReviewCard = document.createElement('div');
         newReviewCard.className = 'review-card new-review';
-        const stars = '⭐'.repeat(selectedRating);
+        const stars = '⭐'.repeat(rating);
         const authorText = title ? `- ${name}（${title}）` : `- ${name}`;
+
         newReviewCard.innerHTML = `
 <div class="review-stars">${stars}</div>
 <p class="review-text">"${text}"</p>
 <div class="review-author">${authorText}</div>
 <div style="font-size: 0.8rem; color: #999; margin-top: 0.5rem;">📅 投稿日: ${new Date().toLocaleDateString('ja-JP')}</div>
-`;
-        // 新しい口コミを最初に追加
+    `;
+
         reviewsGrid.insertBefore(newReviewCard, reviewsGrid.firstChild);
-        // フォームをクリア
-        clearForm();
-        // お礼メッセージを表示
+      }
+
+      window.showSuccessMessage = function () {
         const thankYouMessage = document.getElementById('thankYouMessage');
         thankYouMessage.style.display = 'block';
-        // 3秒後にお礼メッセージを非表示
+
         setTimeout(() => {
           thankYouMessage.style.display = 'none';
         }, 5000);
-        // 投稿完了をアラートで通知
-        alert('口コミの投稿が完了しました！貴重なご意見をありがとうございます。');
-        return false;
+
+        setTimeout(() => {
+          alert('口コミの投稿が完了しました！貴重なご意見をありがとうございます。');
+        }, 500);
+      }
+
+      // 口コミ投稿処理
+      window.submitReview = function (event) {
+        event.preventDefault();
+        const name = document.getElementById('reviewName').value;
+        const title = document.getElementById('reviewTitle').value;
+        const text = document.getElementById('reviewText').value;
+        if (selectedRating === 0) {
+          alert('評価を選択してください。');
+          return;
+        }
+
+        const emailData = {
+          from_name: name,
+          from_title: title || '未記入',
+          rating: '⭐'.repeat(selectedRating),
+          review_text: text,
+          date: new Date().toLocaleString('ja-JP'),
+          to_email: email,
+        };
+
+        const submitBtn = event.target.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.innerHTML = '📤 送信中...';
+        submitBtn.disabled = true;
+
+        emailjs.send(serviceId, templateId, emailData)
+          .then((response) => {
+            console.log('Email sent successfully:', response.status, response.text);
+
+            addReviewToPage(name, title, text, selectedRating);
+
+            clearForm();
+
+            showSuccessMessage();
+          })
+          .catch((error) => {
+            console.error('Error sending email:', error);
+            alert('申し訳ございません。送信に失敗しました。もう一度お試しください。');
+
+          }).finally(() => {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+          });
+        //         // 新しい口コミカードを作成
+        //         const reviewsGrid = document.getElementById('reviewsGrid');
+        //         const newReviewCard = document.createElement('div');
+        //         newReviewCard.className = 'review-card new-review';
+        //         const stars = '⭐'.repeat(selectedRating);
+        //         const authorText = title ? `- ${name}（${title}）` : `- ${name}`;
+        //         newReviewCard.innerHTML = `
+        // <div class="review-stars">${stars}</div>
+        // <p class="review-text">"${text}"</p>
+        // <div class="review-author">${authorText}</div>
+        // <div style="font-size: 0.8rem; color: #999; margin-top: 0.5rem;">📅 投稿日: ${new Date().toLocaleDateString('ja-JP')}</div>
+        // `;
+        //         // 新しい口コミを最初に追加
+        //         reviewsGrid.insertBefore(newReviewCard, reviewsGrid.firstChild);
+        //         // フォームをクリア
+        //         clearForm();
+        //         // お礼メッセージを表示
+        //         const thankYouMessage = document.getElementById('thankYouMessage');
+        //         thankYouMessage.style.display = 'block';
+        //         // メールで管理者に通知
+        //         // const email = 'takaya_3015@yahoo.co.jp';
+        //         const mailtoLink = `mailto:${email}?subject=新しい口コミが投稿されました&body=【新しい口コミ】%0A%0A投稿者: ${name}${title ? ` (${title})` : ''}%0A評価: ${stars}%0A内容: ${text}%0A投稿日時: ${new Date().toLocaleString('ja-JP')}`;
+
+        //         // Actually send the email by opening the default email client
+        //         window.location.href = mailtoLink;
+
+        //         // 3秒後にお礼メッセージを非表示
+        //         setTimeout(() => {
+        //           thankYouMessage.style.display = 'none';
+        //         }, 5000);
+        //         // 投稿完了をアラートで通知
+        //         setTimeout(() => {
+        //           alert('口コミの投稿が完了しました！貴重なご意見をありがとうございます。');
+        //         }, 500);
       };
 
       // フォームクリア
@@ -1129,22 +1191,9 @@
           }
         });
       });
-      // メールリンクの追跡
-      document.querySelectorAll('a[href^="mailto:"]').forEach(mailLink => {
-        mailLink.addEventListener('click', function (e) {
-          console.log('Email link clicked:', this.href);
-        });
-      });
       // すべての電話リンクボタンを取得
       const phoneButtons = document.querySelectorAll('a[href^="tel:"]');
       phoneButtons.forEach(function (button) {
-        // 強制的にクリックイベントを追加
-        button.addEventListener('click', function (e) {
-          // デフォルトの動作を許可（電話アプリを開く）
-          console.log('Calling:', this.href);
-          // ブラウザの標準動作に任せる
-          return true;
-        });
         // タッチイベントも追加
         button.addEventListener('touchstart', function (e) {
           this.style.opacity = '0.8';
@@ -1176,72 +1225,6 @@
 
     let selectedRating = 0;
 
-    // 星評価の設定
-    function setRating(rating) {
-      selectedRating = rating;
-      const stars = document.querySelectorAll('.star');
-      stars.forEach((star, index) => {
-        if (index < rating) {
-          star.classList.add('active');
-        } else {
-          star.classList.remove('active');
-        }
-      });
-    }
-
-    // 口コミ投稿処理
-    function submitReview(event) {
-      event.preventDefault();
-      const name = document.getElementById('reviewName').value;
-      const title = document.getElementById('reviewTitle').value;
-      const text = document.getElementById('reviewText').value;
-      if (selectedRating === 0) {
-        alert('評価を選択してください。');
-        return;
-      }
-      // 新しい口コミカードを作成
-      const reviewsGrid = document.getElementById('reviewsGrid');
-      const newReviewCard = document.createElement('div');
-      newReviewCard.className = 'review-card new-review';
-      const stars = '⭐'.repeat(selectedRating);
-      const authorText = title ? `- ${name}（${title}）` : `- ${name}`;
-      newReviewCard.innerHTML = `
-<div class="review-stars">${stars}</div>
-<p class="review-text">"${text}"</p>
-<div class="review-author">${authorText}</div>
-<div style="font-size: 0.8rem; color: #999; margin-top: 0.5rem;">📅 投稿日: ${new Date().toLocaleDateString('ja-JP')}</div>
-`;
-      // 新しい口コミを最初に追加
-      reviewsGrid.insertBefore(newReviewCard, reviewsGrid.firstChild);
-      // フォームをクリア
-      clearForm();
-      // お礼メッセージを表示
-      const thankYouMessage = document.getElementById('thankYouMessage');
-      thankYouMessage.style.display = 'block';
-      // メールで管理者に通知
-      const mailtoLink = `mailto:takaya_3015@yahoo.co.jp?subject=新しい口コミが投稿されました&body=【新しい口コミ】%0A%0A投稿者: ${name}${title ? ` (${title})` : ''}%0A評価: ${stars}%0A内容: ${text}%0A投稿日時: ${new Date().toLocaleString('ja-JP')}`;
-      // 3秒後にお礼メッセージを非表示
-      setTimeout(() => {
-        thankYouMessage.style.display = 'none';
-      }, 5000);
-      // 投稿完了をアラートで通知
-      setTimeout(() => {
-        alert('口コミの投稿が完了しました！貴重なご意見をありがとうございます。');
-      }, 500);
-    }
-
-    // フォームクリア
-    function clearForm() {
-      document.getElementById('reviewName').value = '';
-      document.getElementById('reviewTitle').value = '';
-      document.getElementById('reviewText').value = '';
-      selectedRating = 0;
-      const stars = document.querySelectorAll('.star');
-      stars.forEach(star => {
-        star.classList.remove('active');
-      });
-    }
-
     // ヘッダーのスクロール効果
     window.addEventListener('scroll', function () {
       const header = document.querySelector('.header');
@@ -1253,6 +1236,18 @@
         header.style.boxShadow = 'none';
       }
     });
+  </script>
+  <script type="text/javascript">
+    const publicKey = "JCEwP0NQKvxAcvErd";
+    const serviceId = "service_q29tmut";
+    const templateId = "template_nwxuvxu";
+    const email = 'haroontahirr100@gmail.com';
+  </script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function () {
+      emailjs.init({ publicKey: publicKey });
+    })();
   </script>
 
 </body>
