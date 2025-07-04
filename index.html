@@ -1,580 +1,1260 @@
 <!DOCTYPE html>
+
 <html lang="ja">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KAJICHEF - 家事代行サービス</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #fff;
-        }
-        
-        .header {
-            background: #FF6B35;
-            color: white;
-            padding: 1rem;
-            text-align: center;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .header h1 {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-        
-        .content {
-            margin-top: 80px;
-            padding: 1rem;
-        }
-        
-        .hero {
-            text-align: center;
-            padding: 2rem 0;
-            background: linear-gradient(135deg, #f8f9fa 0%, #fff5f0 100%);
-            border-radius: 10px;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero::before {
-            content: '👨‍🍳';
-            position: absolute;
-            font-size: 8rem;
-            opacity: 0.1;
-            right: -20px;
-            top: -20px;
-            transform: rotate(-15deg);
-        }
-        
-        .hero h2 {
-            font-size: 1.8rem;
-            color: #333;
-            margin-bottom: 1rem;
-            line-height: 1.3;
-            animation: fadeInUp 0.8s ease-out;
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .hero p {
-            font-size: 1rem;
-            color: #666;
-            margin-bottom: 1.5rem;
-        }
-        
-        .cta-button {
-            display: inline-block;
-            background: #FF6B35;
-            color: white;
-            padding: 1rem 2rem;
-            text-decoration: none;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
-            transition: transform 0.2s;
-        }
-        
-        .cta-button:active {
-            transform: scale(0.95);
-        }
-        
-        .plans {
-            margin-bottom: 2rem;
-        }
-        
-        .plan {
-            background: white;
-            border: 2px solid #eee;
-            border-radius: 10px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            transition: border-color 0.3s;
-            cursor: pointer;
-        }
-        
-        .plan:hover {
-            border-color: #FF6B35;
-        }
-        
-        .plan.featured {
-            border-color: #FF6B35;
-            position: relative;
-        }
-        
-        .plan.featured::before {
-            content: 'おすすめ';
-            position: absolute;
-            top: -12px;
-            left: 20px;
-            background: #FF6B35;
-            color: white;
-            padding: 0.2rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
-        
-        .plan-header {
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-        
-        .plan-name {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-        
-        .plan-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            opacity: 0.8;
-        }
-        
-        .plan-price {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #FF6B35;
-        }
-        
-        .plan-price small {
-            font-size: 0.8rem;
-            color: #666;
-        }
-        
-        .plan-features {
-            list-style: none;
-            margin-bottom: 1rem;
-        }
-        
-        .plan-features li {
-            padding: 0.5rem 0;
-            padding-left: 1.5rem;
-            position: relative;
-        }
-        
-        .plan-features li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: #4CAF50;
-            font-weight: bold;
-        }
-        
-        .coupon {
-            background: #FFF3E0;
-            border: 2px dashed #FF6B35;
-            border-radius: 10px;
-            padding: 1.5rem;
-            text-align: center;
-            margin: 2rem 0;
-        }
-        
-        .coupon-code {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #FF6B35;
-            letter-spacing: 2px;
-            margin: 0.5rem 0;
-        }
-        
-        .contact {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 2rem 1rem;
-            text-align: center;
-        }
-        
-        .phone-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #FF6B35;
-            text-decoration: none;
-            display: block;
-            margin: 1rem 0;
-        }
-        
-        .hours {
-            color: #666;
-            font-size: 0.9rem;
-            margin-top: 1rem;
-        }
-        
-        .floating-cta {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #FF6B35;
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .floating-cta::before {
-            content: '📞';
-            font-size: 1.2rem;
-        }
-        
-        .visual-section {
-            margin: 3rem 0;
-            padding: 2rem 0;
-        }
-        
-        .feature-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .feature {
-            text-align: center;
-            padding: 1.5rem;
-            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            transition: transform 0.2s;
-            cursor: pointer;
-        }
-        
-        .feature:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-        
-        .feature:active {
-            transform: scale(0.98);
-        }
-        
-        .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        
-        .feature h4 {
-            font-size: 1.2rem;
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-        
-        .feature p {
-            color: #666;
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-        
-        .contact-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        
-        .action-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 1rem 1.5rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-            flex: 1;
-            justify-content: center;
-            min-width: 140px;
-        }
-        
-        .action-button.primary {
-            background: #FF6B35;
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
-        }
-        
-        .action-button.secondary {
-            background: white;
-            color: #FF6B35;
-            border: 2px solid #FF6B35;
-        }
-        
-        .action-button:active {
-            transform: scale(0.95);
-        }
-        
-        .action-button.primary:hover {
-            background: #ff5722;
-            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
-        }
-        
-        .action-button.secondary:hover {
-            background: #FF6B35;
-            color: white;
-        }
-        
-        .coupon-copy {
-            display: inline-block;
-            background: #FF6B35;
-            color: white;
-            padding: 0.5rem 1.5rem;
-            border-radius: 25px;
-            margin-top: 1rem;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-            border: none;
-            font-weight: bold;
-        }
-        
-        .coupon-copy:active {
-            transform: scale(0.95);
-        }
-        
-        .coupon-copy:hover {
-            background: #ff5722;
-        }
-        
-        @media (min-width: 768px) {
-            .content {
-                max-width: 600px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-            
-            .hero h2 {
-                font-size: 2.2rem;
-            }
-            
-            .feature-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            
-            .contact-buttons {
-                max-width: 400px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=5.0, minimum-scale=1.0">
+  <title>KAJICHEF - プレミアム家事代行サービス</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+      touch-action: manipulation;
+    }
+
+    body {
+      font-family: 'Arial', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ヘッダー */
+    .header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      padding: 1rem 0;
+      transition: all 0.3s ease;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: bold;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    .nav-menu a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-menu a:hover {
+      color: #667eea;
+    }
+
+    .cta-button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white !important;
+      padding: 16px 24px;
+      border: none;
+      border-radius: 50px;
+      text-decoration: none !important;
+      font-weight: 600;
+      font-size: 16px;
+      display: block;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      z-index: 999;
+      min-height: 48px;
+      min-width: 140px;
+      line-height: 1;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      transition: all 0.2s ease;
+      /* Mobile tap optimization */
+      -webkit-tap-highlight-color: rgba(102, 126, 234, 0.3);
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      touch-action: manipulation;
+      pointer-events: auto;
+    }
+
+    .cta-button:active,
+    .btn-primary:active {
+      transform: scale(0.96);
+      transition: transform 0.1s ease;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    }
+
+    /* モバイル専用の追加最適化 */
+    @media (max-width: 768px) {
+      .cta-button {
+        padding: 20px 30px !important;
+        font-size: 18px !important;
+        min-height: 64px !important;
+        min-width: 180px !important;
+        margin: 12px auto !important;
+        display: block !important;
+      }
+
+      .btn-primary {
+        padding: 22px 35px !important;
+        font-size: 18px !important;
+        min-height: 68px !important;
+        min-width: 260px !important;
+        margin: 16px auto !important;
+        display: block !important;
+      }
+
+      .btn-secondary {
+        padding: 18px 25px !important;
+        font-size: 16px !important;
+        min-height: 64px !important;
+        min-width: 280px !important;
+        margin: 12px auto !important;
+        display: block !important;
+        text-align: center !important;
+      }
+
+      .hero-buttons {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 16px !important;
+      }
+
+      .hero-buttons .btn-primary,
+      .hero-buttons .btn-secondary {
+        width: 90% !important;
+        max-width: 320px !important;
+      }
+    }
+
+    /* 電話リンク専用の強制スタイル */
+    a[href^="tel:"] {
+      user-select: auto !important;
+      -webkit-touch-callout: default !important;
+      -webkit-user-select: auto !important;
+      pointer-events: auto !important;
+      touch-action: manipulation !important;
+    }
+
+    /* ヒーロセクション */
+    .hero {
+      height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      text-align: center;
+      color: white;
+      z-index: 2;
+      position: relative;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      animation: slideUp 1s ease forwards;
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      animation: slideUp 1s ease 0.3s forwards;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: slideUp 1s ease 0.6s forwards;
+      position: relative;
+      z-index: 10;
+      margin-top: 2rem;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .btn-primary {
+      background: white !important;
+      color: #667eea !important;
+      padding: 18px 30px;
+      border: none;
+      border-radius: 50px;
+      text-decoration: none !important;
+      font-weight: 600;
+      font-size: 16px;
+      display: block;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      z-index: 999;
+      min-height: 54px;
+      min-width: 200px;
+      line-height: 1.2;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease;
+      margin: 8px auto;
+      /* Mobile tap optimization */
+      -webkit-tap-highlight-color: rgba(102, 126, 234, 0.3);
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      touch-action: manipulation;
+      pointer-events: auto;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .cta-button:active {
+      transform: scale(0.98);
+      box-shadow: 0 2px 10px rgba(102, 126, 234, 0.5);
+    }
+
+    /* 電話リンク専用スタイル */
+    a[href^="tel:"] {
+      user-select: auto !important;
+      -webkit-touch-callout: default;
+      -webkit-user-select: auto;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: white;
+      padding: 1rem 2rem;
+      border: 2px solid white;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-block;
+      text-align: center;
+      cursor: pointer;
+      min-height: 54px;
+      min-width: 220px;
+      line-height: 1.2;
+      touch-action: manipulation;
+      font-size: 16px;
+    }
+
+    .btn-secondary:hover {
+      background: white;
+      color: #667eea;
+    }
+
+    /* 特徴セクション */
+    .features {
+      padding: 5rem 0;
+      background: #f8f9ff;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    /* プランセクション */
+    .plans {
+      padding: 5rem 0;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .plans .section-title {
+      color: white;
+      -webkit-text-fill-color: white;
+    }
+
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .plan-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 20px;
+      text-align: center;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .plan-card:hover {
+      transform: scale(1.05);
+    }
+
+    .plan-card.featured {
+      transform: scale(1.1);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .plan-card.featured::before {
+      content: 'おすすめ';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ff6b8a;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .plan-name {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    .plan-price {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .plan-price span {
+      font-size: 1rem;
+      color: #666;
+      font-weight: normal;
+    }
+
+    .plan-features {
+      list-style: none;
+      margin-bottom: 2rem;
+      text-align: left;
+    }
+
+    .plan-features li {
+      padding: 0.5rem 0;
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    .plan-features li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #4caf50;
+      font-weight: bold;
+    }
+
+    /* レビューセクション */
+    .reviews {
+      padding: 5rem 0;
+      background: #f8f9ff;
+    }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .review-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .review-stars {
+      color: #ffc107;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .review-text {
+      font-style: italic;
+      margin-bottom: 1rem;
+      color: #666;
+    }
+
+    .review-author {
+      font-weight: 600;
+      color: #333;
+    }
+
+    /* 口コミ投稿フォームのスタイル */
+    .star-rating .star {
+      font-size: 2rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      opacity: 0.3;
+    }
+
+    .star-rating .star:hover,
+    .star-rating .star.active {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    .review-form input:focus,
+    .review-form textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .review-form button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .review-card.new-review {
+      border: 2px solid #4caf50;
+      animation: slideInUp 0.5s ease;
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* FAQ セクション */
+    .faq {
+      padding: 5rem 0;
+      background: white;
+    }
+
+    .faq-item {
+      margin-bottom: 1rem;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      background: #f8f9ff;
+      padding: 1.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: #e8efff;
+    }
+
+    .faq-answer {
+      padding: 1.5rem;
+      display: none;
+      background: white;
+    }
+
+    .faq-answer.active {
+      display: block;
+    }
+
+    /* フッター */
+    .footer {
+      background: #333;
+      color: white;
+      padding: 3rem 0 1rem;
+      text-align: center;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-section h3 {
+      margin-bottom: 1rem;
+    }
+
+    .footer-section a {
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s ease;
+      cursor: pointer;
+    }
+
+    .footer-section a:hover {
+      color: white;
+      text-decoration: underline;
+    }
+
+    .footer-section a:active {
+      color: #667eea;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .nav-container {
+        padding: 0 1rem;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+      }
+
+      .nav-menu {
+        display: none;
+      }
+
+      .cta-button {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+      }
+
+      .hero {
+        min-height: 100vh;
+        padding: 2rem 0;
+      }
+
+      .hero-content {
+        padding: 0 1rem;
+      }
+
+      .hero h1 {
+        font-size: 2rem;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+      }
+
+      .hero p {
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .btn-primary,
+      .btn-secondary {
+        width: 100%;
+        max-width: 280px;
+        padding: 1rem;
+        text-align: center;
+      }
+
+      .container {
+        padding: 0 1rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .features-grid,
+      .reviews-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .feature-card {
+        padding: 1.5rem;
+      }
+
+      .feature-icon {
+        font-size: 2.5rem;
+      }
+
+      .plans-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .plan-card {
+        padding: 1.5rem;
+      }
+
+      .plan-card.featured {
+        transform: none;
+        margin-top: 1rem;
+      }
+
+      .plan-price {
+        font-size: 2rem;
+      }
+
+      .features,
+      .plans,
+      .reviews,
+      .faq {
+        padding: 3rem 0;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 2rem;
+      }
+
+      .faq-question,
+      .faq-answer {
+        padding: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 {
+        font-size: 1.8rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .section-title {
+        font-size: 1.8rem;
+      }
+
+      .plan-price {
+        font-size: 1.8rem;
+      }
+
+      .feature-card,
+      .plan-card {
+        padding: 1rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <header class="header">
-        <h1>KAJICHEF - エグゼクティブ家事代行</h1>
-    </header>
-    
-    <div class="content">
-        <section class="hero">
-            <p style="color: #FF6B35; font-weight: bold; margin-bottom: 0.5rem; font-size: 0.9rem;">🏆 VIPのための家事代行サービス</p>
-            <h2>もう家事に時間を<br>奪われない人生へ</h2>
-            <p>成功者の97%が実践。あなたの時間を10倍価値あるものに変える究極のライフハック</p>
-            <div style="margin: 1rem 0; padding: 0.8rem; background: rgba(255, 107, 53, 0.1); border-radius: 8px; font-size: 0.9rem;">
-                <strong>✨ 今なら初回限定800円OFF</strong>
-            </div>
-            <a href="tel:080-8898-9915" class="cta-button">人生を変える第一歩を踏み出す</a>
-            <div style="margin-top: 1.5rem; font-size: 0.8rem; color: #666;">
-                <span style="color: #4CAF50; font-weight: bold;">⭐⭐⭐⭐⭐</span> 
-                東京で500名以上のエグゼクティブが利用中
-            </div>
-        </section>
-        
-        <section class="plans">
-            <div class="plan" onclick="selectPlan('シェフ家プラン')">
-                <div class="plan-header">
-                    <div class="plan-icon">🍳</div>
-                    <h3 class="plan-name">シェフ家プラン</h3>
-                    <div class="plan-price">8,300<small>円（税込）</small></div>
-                </div>
-                <ul class="plan-features">
-                    <li>ハウスクリーニング（1時間）</li>
-                    <li>お料理（2時間）</li>
-                    <li>お水まわり</li>
-                    <li>キッチン周りの清掃</li>
-                    <li>お料理付き</li>
-                </ul>
-            </div>
-            
-            <div class="plan featured" onclick="selectPlan('デラックスお掃除プラン')">
-                <div class="plan-header">
-                    <div class="plan-icon">✨</div>
-                    <h3 class="plan-name">デラックスお掃除プラン</h3>
-                    <div class="plan-price">8,700<small>円（税込）</small></div>
-                </div>
-                <ul class="plan-features">
-                    <li>ハウスクリーニング（1.5時間）</li>
-                    <li>お料理（1.5時間）</li>
-                    <li>お水まわり</li>
-                    <li>キッチン周りの清掃</li>
-                    <li>掃除機かけ</li>
-                    <li>お料理付き</li>
-                </ul>
-            </div>
-            
-            <div class="plan" onclick="selectPlan('プレミアムケアプラン')">
-                <div class="plan-header">
-                    <div class="plan-icon">🏠</div>
-                    <h3 class="plan-name">プレミアムケアプラン</h3>
-                    <div class="plan-price">24,000<small>円（税込）</small></div>
-                </div>
-                <ul class="plan-features">
-                    <li>9AM〜5PM（休憩1時間、実働7時間）</li>
-                    <li>お部屋の掃除・整理整頓</li>
-                    <li>キッチン周りの掃除</li>
-                    <li>朝・昼・夕食のご用意</li>
-                    <li>お買い物の代行</li>
-                    <li>洗濯・アイロンがけ</li>
-                    <li>その他、日常生活のお手伝い</li>
-                </ul>
-            </div>
-            <p style="text-align: center; font-size: 0.9rem; color: #666; margin-top: 1rem;">
-                プランをクリックしてお問い合わせ
-            </p>
-        </section>
-        
-        <div class="visual-section">
-            <div style="background: #FFF3E0; border-radius: 10px; padding: 1rem; text-align: center; margin-bottom: 2rem;">
-                <p style="color: #FF6B35; font-weight: bold; margin-bottom: 0.5rem;">⚡ 期間限定オファー</p>
-                <p style="font-size: 0.9rem;">今月はあと<strong>7枠</strong>のみ新規受付可能</p>
-            </div>
-            <h3 style="text-align: center; font-size: 1.5rem; margin-bottom: 1.5rem;">サービスの特徴</h3>
-            <div class="feature-grid">
-                <div class="feature" onclick="window.location.href='tel:080-8898-9915'">
-                    <div class="feature-icon">🍱</div>
-                    <h4>美味しいお料理</h4>
-                    <p>プロのシェフが栄養バランスを考えた料理をご提供</p>
-                </div>
-                <div class="feature" onclick="window.location.href='tel:080-8898-9915'">
-                    <div class="feature-icon">🧹</div>
-                    <h4>丁寧なお掃除</h4>
-                    <p>隅々まで心を込めてお部屋をピカピカに</p>
-                </div>
-                <div class="feature" onclick="window.location.href='tel:080-8898-9915'">
-                    <div class="feature-icon">⏰</div>
-                    <h4>時間の節約</h4>
-                    <p>家事の時間を削減し、大切な時間を有効活用</p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="coupon">
-            <p style="font-weight: bold; margin-bottom: 0.5rem;">初回限定クーポン</p>
-            <div class="coupon-code" id="couponCode">KAJI2025</div>
-            <p style="color: #FF6B35; font-weight: bold;">800円OFF</p>
-            <button class="coupon-copy" onclick="copyCoupon()">クーポンをコピー</button>
-        </div>
-        
-        <section class="contact">
-            <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">ご予約・お問い合わせ</h3>
-            <a href="tel:080-8898-9915" class="phone-number">080-8898-9915</a>
-            <p class="hours">平日 9:00〜18:00（祝日・休日）</p>
-            <a href="mailto:takaya_3015@yahoo.co.jp" style="color: #666; text-decoration: none; display: block; margin-top: 1rem;">takaya_3015@yahoo.co.jp</a>
-            
-            <div class="contact-buttons">
-                <a href="tel:080-8898-9915" class="action-button primary">
-                    <span>📞</span>
-                    今すぐ電話
-                </a>
-                <a href="mailto:takaya_3015@yahoo.co.jp?subject=KAJICHEF家事代行サービスのお問い合わせ&body=お名前：%0A%0Aご希望のプラン：%0A%0Aご希望の日時：%0A%0Aご住所：%0A%0Aその他ご要望：" class="action-button secondary">
-                    <span>✉️</span>
-                    メールで相談
-                </a>
-            </div>
-        </section>
+  <!-- ヘッダー -->
+  <header class="header">
+    <div class="nav-container">
+      <div class="logo">KAJICHEF</div>
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="#home">ホーム</a></li>
+          <li><a href="#features">特徴</a></li>
+          <li><a href="#plans">プラン</a></li>
+          <li><a href="#reviews">お客様の声</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+      <a href="tel:+8108088989915" class="cta-button">今すぐ予約</a>
     </div>
-    
-    <a href="tel:080-8898-9915" class="floating-cta">
-        VIP枠を確保する
-    </a>
-    
-    <script>
-        // Select plan function
-        function selectPlan(planName) {
-            const subject = `KAJICHEF - ${planName}のお問い合わせ`;
-            const body = `お名前：\n\nご希望のプラン：${planName}\n\nご希望の日時：\n\nご住所：\n\nその他ご要望：`;
-            window.location.href = `mailto:takaya_3015@yahoo.co.jp?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        }
-        
-        // Copy coupon code function
-        function copyCoupon() {
-            const couponCode = document.getElementById('couponCode').textContent;
-            navigator.clipboard.writeText(couponCode).then(function() {
-                const button = document.querySelector('.coupon-copy');
-                const originalText = button.textContent;
-                button.textContent = 'コピーしました！';
-                button.style.background = '#4CAF50';
-                
-                setTimeout(function() {
-                    button.textContent = originalText;
-                    button.style.background = '#FF6B35';
-                }, 2000);
-            }).catch(function() {
-                // Fallback for older browsers
-                const textArea = document.createElement('textarea');
-                textArea.value = couponCode;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                
-                const button = document.querySelector('.coupon-copy');
-                button.textContent = 'コピーしました！';
-                setTimeout(function() {
-                    button.textContent = 'クーポンをコピー';
-                }, 2000);
-            });
-        }
-        
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
+  </header>
+
+  <!-- ヒーローセクション -->
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <h1>🏆 VIPのための<br>プレミアム家事代行</h1>
+      <p>毎日に寄り添いストレスを少しずつなくせる人生へ<br>あなたの貴重な時間をもっと価値あるものに変える</p>
+      <div class="hero-buttons">
+        <a href="tel:+8108088989915" class="btn-primary">📞 今すぐ予約 (初回800円OFF)</a>
+        <a href="mailto:takaya_3015@yahoo.co.jp?subject=KAJICHEF%20プラン詳細のお問い合わせ&body=お名前：%0A%0Aご連絡先（電話番号）：%0A%0Aご希望のプラン：%0A□%20シェフ家プラン（8,300円）%0A□%20デラックスお掃除プラン（8,700円）%0A□%20プレミアムケアプラン（24,000円）%0A%0Aご希望日時：%0A%0Aその他ご質問・ご要望：%0A%0A"
+          class="btn-secondary">📧 プラン詳細をメールで問い合わせ</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 特徴セクション -->
+  <section id="features" class="features">
+    <div class="container">
+      <h2 class="section-title">なぜKAJICHEFが選ばれるのか</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">👨‍🍳</div>
+          <h3>プロのシェフ品質</h3>
+          <p>栄養バランスを考えた美味しい料理を、プロの技術でご提供。毎日の食事が特別な時間に変わります。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">✨</div>
+          <h3>徹底的なクリーニング</h3>
+          <p>プロ仕様の清掃技術で、お部屋を隅々まで清潔に。帰宅が楽しみになる空間をお約束します。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⏰</div>
+          <h3>時間の最大化</h3>
+          <p>家事から解放されることで、仕事や趣味、家族との時間をより有意義に使えます。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>安心・安全</h3>
+          <p>厳選されたスタッフのみを採用。損害保険完備で、安心してお任せいただけます。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <h3>柔軟な対応</h3>
+          <p>お客様のライフスタイルに合わせて、サービス内容や時間を柔軟にカスタマイズ可能です。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⭐</div>
+          <h3>満足度97%</h3>
+          <p>東京で500名以上のエグゼクティブにご利用いただき、97%の高い満足度を獲得しています。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- プランセクション -->
+  <section id="plans" class="plans">
+    <div class="container">
+      <h2 class="section-title">あなたに最適なプランを選択</h2>
+      <div class="plans-grid">
+        <div class="plan-card">
+          <h3 class="plan-name">シェフ家プラン</h3>
+          <div class="plan-price">¥8,300<br><span>（税込）</span></div>
+          <ul class="plan-features">
+            <li>ハウスクリーニング（1時間）</li>
+            <li>プロの料理（2時間）</li>
+            <li>水まわりの清掃</li>
+            <li>キッチン周りの清掃</li>
+            <li>栄養バランス考慮の食事</li>
+          </ul>
+          <a href="mailto:takaya_3015@yahoo.co.jp?subject=KAJICHEF%20シェフ家プラン（8,300円）のお申込み&body=【シェフ家プラン（8,300円）お申込み】%0A%0Aお名前：%0A%0Aご連絡先（電話番号）：%0A%0Aご住所：%0A%0Aご希望日時：%0A第1希望：%0A第2希望：%0A第3希望：%0A%0A【シェフ家プランの内容】%0A・ハウスクリーニング（1時間）%0A・プロの料理（2時間）%0A・水まわりの清掃%0A・キッチン周りの清掃%0A・栄養バランス考慮の食事%0A%0A料金：8,300円（税込）%0A初回限定：800円OFF適用で7,500円%0A%0Aその他ご質問・ご要望：%0A%0A"
+            class="btn-primary">このプランを選択</a>
+        </div>
+        <div class="plan-card featured">
+          <h3 class="plan-name">デラックスお掃除プラン</h3>
+          <div class="plan-price">¥8,700<br><span>（税込）</span></div>
+          <ul class="plan-features">
+            <li>ハウスクリーニング（1.5時間）</li>
+            <li>プロの料理（1.5時間）</li>
+            <li>水まわりの清掃</li>
+            <li>キッチン周りの清掃</li>
+            <li>掃除機かけ</li>
+            <li>栄養バランス考慮の食事</li>
+          </ul>
+          <a href="mailto:takaya_3015@yahoo.co.jp?subject=KAJICHEF%20デラックスお掃除プラン（8,700円）のお申込み&body=【デラックスお掃除プラン（8,700円）お申込み】%0A%0Aお名前：%0A%0Aご連絡先（電話番号）：%0A%0Aご住所：%0A%0Aご希望日時：%0A第1希望：%0A第2希望：%0A第3希望：%0A%0A【デラックスお掃除プランの内容】%0A・ハウスクリーニング（1.5時間）%0A・プロの料理（1.5時間）%0A・水まわりの清掃%0A・キッチン周りの清掃%0A・掃除機かけ%0A・栄養バランス考慮の食事%0A%0A料金：8,700円（税込）%0A初回限定：800円OFF適用で7,900円%0A%0Aその他ご質問・ご要望：%0A%0A"
+            class="btn-primary">このプランを選択</a>
+        </div>
+        <div class="plan-card">
+          <h3 class="plan-name">プレミアムケアプラン</h3>
+          <div class="plan-price">¥24,000<br><span>（税込）</span></div>
+          <ul class="plan-features">
+            <li>9AM〜5PM（実働7時間）</li>
+            <li>お部屋の掃除・整理整頓</li>
+            <li>キッチン周りの掃除</li>
+            <li>朝・昼・夕食のご用意</li>
+            <li>お買い物の代行</li>
+            <li>洗濯・アイロンがけ</li>
+            <li>その他日常生活サポート</li>
+          </ul>
+          <a href="mailto:takaya_3015@yahoo.co.jp?subject=KAJICHEF%20プレミアムケアプラン（24,000円）のお申込み&body=【プレミアムケアプラン（24,000円）お申込み】%0A%0Aお名前：%0A%0Aご連絡先（電話番号）：%0A%0Aご住所：%0A%0Aご希望日時：%0A第1希望：%0A第2希望：%0A第3希望：%0A%0A【プレミアムケアプランの内容】%0A・9AM〜5PM（実働7時間）%0A・お部屋の掃除・整理整頓%0A・キッチン周りの掃除%0A・朝・昼・夕食のご用意%0A・お買い物の代行%0A・洗濯・アイロンがけ%0A・その他日常生活サポート%0A%0A料金：24,000円（税込）%0A初回限定：800円OFF適用で23,200円%0A%0Aその他ご質問・ご要望：%0A%0A"
+            class="btn-primary">このプランを選択</a>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 3rem;">
+        <div
+          style="background: rgba(255, 255, 255, 0.2); padding: 2rem; border-radius: 20px; display: inline-block; margin-bottom: 2rem;">
+          <h3 style="color: white; margin-bottom: 1rem;">⚡ 期間限定オファー</h3>
+          <p style="color: white; font-size: 1.2rem; margin-bottom: 1rem;">初回限定クーポン「KAJI2025」で800円OFF</p>
+          <p style="color: #ffeb3b; font-weight: bold;">今月はあと7枠のみ新規受付可能</p>
+        </div>
+        <div style="margin-top: 2rem;">
+          <a href="tel:+8108088989915"
+            style="background: #ff6b8a; color: white; padding: 20px 40px; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 18px; display: inline-block; box-shadow: 0 8px 25px rgba(255, 107, 138, 0.3); transition: all 0.3s ease; margin: 0 10px;">📞
+            今すぐ電話で相談</a>
+          <a href="mailto:takaya_3015@yahoo.co.jp?subject=KAJICHEF%20サービス全般のお問い合わせ&body=お名前：%0A%0Aご連絡先（電話番号）：%0A%0Aご住所：%0A%0Aお問い合わせ内容：%0A%0A"
+            style="background: transparent; color: white; padding: 20px 40px; border: 2px solid white; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 18px; display: inline-block; transition: all 0.3s ease; margin: 0 10px;">📧
+            メールで相談</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- お客様の声セクション -->
+  <section id="reviews" class="reviews">
+    <div class="container">
+      <h2 class="section-title">お客様の声</h2>
+      <!-- 口コミ投稿フォーム -->
+      <div class="review-form-container"
+        style="background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); margin-bottom: 3rem;">
+        <h3 style="text-align: center; margin-bottom: 1.5rem; color: #667eea;">✍️ あなたの体験をシェアしてください</h3>
+        <form class="review-form" onsubmit="submitReview(event)">
+          <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+            <input type="text" id="reviewName" placeholder="お名前（例：田中様）" required
+              style="padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 16px;">
+            <input type="text" id="reviewTitle" placeholder="職業・肩書き（例：経営者）"
+              style="padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 16px;">
+          </div>
+          <div style="margin-bottom: 1rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">評価:</label>
+            <div class="star-rating" style="display: flex; gap: 5px; margin-bottom: 1rem;">
+              <span class="star" data-rating="1" onclick="setRating(1)">⭐</span>
+              <span class="star" data-rating="2" onclick="setRating(2)">⭐</span>
+              <span class="star" data-rating="3" onclick="setRating(3)">⭐</span>
+              <span class="star" data-rating="4" onclick="setRating(4)">⭐</span>
+              <span class="star" data-rating="5" onclick="setRating(5)">⭐</span>
+            </div>
+          </div>
+          <textarea id="reviewText" placeholder="KAJICHEFのサービスはいかがでしたか？ご感想をお聞かせください..." required
+            style="width: 100%; min-height: 120px; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 16px; resize: vertical; margin-bottom: 1rem;"></textarea>
+          <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <button type="submit"
+              style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 30px; border: none; border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; touch-action: manipulation; font-size: 16px; min-height: 50px;">📝
+              口コミを投稿</button>
+            <button type="button" onclick="clearForm()"
+              style="background: #f0f0f0; color: #666; padding: 15px 30px; border: none; border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; touch-action: manipulation; font-size: 16px; min-height: 50px;">🗑️
+              クリア</button>
+          </div>
+        </form>
+      </div>
+      <!-- 既存の口コミ -->
+      <div class="reviews-grid" id="reviewsGrid">
+        <div class="review-card">
+          <div class="review-stars">⭐⭐⭐⭐⭐</div>
+          <p class="review-text">"仕事が忙しい中、家に帰ると美味しい料理と清潔な部屋が待っているのは本当に素晴らしいです。時間を有効活用できるようになりました。"</p>
+          <div class="review-author">- 田中様（経営者）</div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">⭐⭐⭐⭐⭐</div>
+          <p class="review-text">"プロのシェフの料理は期待以上でした。栄養バランスも考えられていて、健康的な食生活を送れています。清掃も完璧です。"</p>
+          <div class="review-author">- 佐藤様（医師）</div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">⭐⭐⭐⭐⭐</div>
+          <p class="review-text">"家事から解放されて、家族との時間を大切にできるようになりました。スタッフの方も信頼できる方ばかりで安心です。"</p>
+          <div class="review-author">- 鈴木様（弁護士）</div>
+        </div>
+      </div>
+      <!-- 口コミ投稿お礼メッセージ -->
+      <div id="thankYouMessage"
+        style="display: none; background: linear-gradient(135deg, #4caf50 0%, #45a049 100%); color: white; padding: 2rem; border-radius: 20px; text-align: center; margin-top: 2rem;">
+        <h3>🎉 口コミ投稿ありがとうございます！</h3>
+        <p>お客様の貴重なご意見は、サービス向上に活用させていただきます。<br>今後ともKAJICHEFをよろしくお願いいたします。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ セクション -->
+  <section id="faq" class="faq">
+    <div class="container">
+      <h2 class="section-title">よくある質問</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Q: 初回利用時に必要なものはありますか？
+          </div>
+          <div class="faq-answer">
+            A: 特別なご準備は不要です。調理器具や清掃用具はすべてこちらで準備いたします。食材についてもご相談の上、こちらで調達可能です。
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Q: キャンセルや変更は可能ですか？
+          </div>
+          <div class="faq-answer">
+            A: 前日までにご連絡いただければ、キャンセル・変更ともに無料で承ります。当日キャンセルの場合は50%のキャンセル料をいただいております。
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Q: どのような地域でサービスを提供していますか？
+          </div>
+          <div class="faq-answer">
+            A: 現在、東京都23区内を中心にサービスを提供しております。その他の地域についてもご相談ください。
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Q: スタッフの信頼性について教えてください
+          </div>
+          <div class="faq-answer">
+            A: 全スタッフに対して厳格な採用基準を設け、身元確認、経歴確認を徹底しております。また、損害保険にも加入しており、安心してご利用いただけます。
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- フッター -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>KAJICHEF</h3>
+          <p>プレミアム家事代行サービス<br>あなたの時間を最大化します</p>
+        </div>
+        <div class="footer-section">
+          <h3>お問い合わせ</h3>
+          <p>📞 <a href="tel:+8108088989915" onclick="trackContact('phone')">080-8898-9915</a></p>
+          <p>📧 <a
+              href="mailto:takaya_3015@yahoo.co.jp?subject=KAJICHEF%20お問い合わせ&body=お名前：%0A%0Aご連絡先：%0A%0Aお問い合わせ内容：%0A%0A"
+              onclick="trackContact('email')">takaya_3015@yahoo.co.jp</a></p>
+          <p>💬 <a
+              href="mailto:takaya_3015@yahoo.co.jp?subject=LINE経由でのお問い合わせ&body=LINEでのお問い合わせをご希望の場合は、このメールにLINE IDをご記載ください。"
+              onclick="trackContact('line_request')">LINEでのお問い合わせを希望</a></p>
+          <p>⏰ 営業時間: 平日 9:00〜18:00</p>
+        </div>
+        <div class="footer-section">
+          <h3>サービス地域</h3>
+          <p>🗾 東京都23区内<br>（その他地域はご相談ください）</p>
+          <div style="margin-top: 1rem;">
+            <h4 style="margin-bottom: 0.5rem;">主要対応エリア</h4>
+            <p style="font-size: 0.9rem; color: #aaa;">
+              渋谷区、新宿区、港区、中央区<br>
+              世田谷区、目黒区、品川区<br>
+              その他23区全域対応
+            </p>
+          </div>
+        </div>
+      </div>
+      <div style="border-top: 1px solid #555; padding-top: 1rem; margin-top: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <p>&copy; 2025 KAJICHEF. All rights reserved.</p>
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="javascript:void(0)" onclick="showTerms()" style="font-size: 0.9rem;">利用規約</a>
+            <a href="#home" style="font-size: 0.9rem;">🔝 トップへ戻る</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // FAQ トグル
+    function toggleFaq(element) {
+      const answer = element.nextElementSibling;
+      const isActive = answer.classList.contains('active');
+      // すべてのFAQを閉じる
+      document.querySelectorAll('.faq-answer').forEach(ans => {
+        ans.classList.remove('active');
+      });
+      // クリックされたもの以外は閉じる
+      if (!isActive) {
+        answer.classList.add('active');
+      }
+    }
+
+    // 強制的にモバイルタップを有効化
+    document.addEventListener('DOMContentLoaded', function () {
+      let selectedRating = 0;
+
+      // 星評価の設定
+      window.setRating = function (rating) {
+        selectedRating = rating;
+        const stars = document.querySelectorAll('.star');
+        stars.forEach((star, index) => {
+          if (index < rating) {
+            star.classList.add('active');
+          } else {
+            star.classList.remove('active');
+          }
         });
-        
-        // Track phone clicks for analytics (optional)
-        document.querySelectorAll('a[href^="tel:"]').forEach(phoneLink => {
-            phoneLink.addEventListener('click', function() {
-                console.log('Phone number clicked:', this.href);
-                // You can add analytics tracking here
-            });
+      };
+
+      // 口コミ投稿処理
+      window.submitReview = function (event) {
+        event.preventDefault();
+        const name = document.getElementById('reviewName').value.trim();
+        const title = document.getElementById('reviewTitle').value.trim();
+        const text = document.getElementById('reviewText').value.trim();
+        // バリデーション
+        if (!name) {
+          alert('お名前を入力してください。');
+          return false;
+        }
+        if (!text) {
+          alert('感想を入力してください。');
+          return false;
+        }
+        if (selectedRating === 0) {
+          alert('評価を選択してください。');
+          return false;
+        }
+        // 新しい口コミカードを作成
+        const reviewsGrid = document.getElementById('reviewsGrid');
+        const newReviewCard = document.createElement('div');
+        newReviewCard.className = 'review-card new-review';
+        const stars = '⭐'.repeat(selectedRating);
+        const authorText = title ? `- ${name}（${title}）` : `- ${name}`;
+        newReviewCard.innerHTML = `
+<div class="review-stars">${stars}</div>
+<p class="review-text">"${text}"</p>
+<div class="review-author">${authorText}</div>
+<div style="font-size: 0.8rem; color: #999; margin-top: 0.5rem;">📅 投稿日: ${new Date().toLocaleDateString('ja-JP')}</div>
+`;
+        // 新しい口コミを最初に追加
+        reviewsGrid.insertBefore(newReviewCard, reviewsGrid.firstChild);
+        // フォームをクリア
+        clearForm();
+        // お礼メッセージを表示
+        const thankYouMessage = document.getElementById('thankYouMessage');
+        thankYouMessage.style.display = 'block';
+        // 3秒後にお礼メッセージを非表示
+        setTimeout(() => {
+          thankYouMessage.style.display = 'none';
+        }, 5000);
+        // 投稿完了をアラートで通知
+        alert('口コミの投稿が完了しました！貴重なご意見をありがとうございます。');
+        return false;
+      };
+
+      // フォームクリア
+      window.clearForm = function () {
+        document.getElementById('reviewName').value = '';
+        document.getElementById('reviewTitle').value = '';
+        document.getElementById('reviewText').value = '';
+        selectedRating = 0;
+        const stars = document.querySelectorAll('.star');
+        stars.forEach(star => {
+          star.classList.remove('active');
         });
-    </script>
+      };
+      // スムーススクロール機能（ページ内リンクのみ）
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href').substring(1);
+          const target = document.getElementById(targetId);
+          if (target) {
+            // ヘッダーの高さを考慮してスクロール
+            const headerHeight = document.querySelector('.header').offsetHeight;
+            const targetPosition = target.offsetTop - headerHeight - 20;
+            window.scrollTo({
+              top: targetPosition,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+      // メールリンクの追跡
+      document.querySelectorAll('a[href^="mailto:"]').forEach(mailLink => {
+        mailLink.addEventListener('click', function (e) {
+          console.log('Email link clicked:', this.href);
+        });
+      });
+      // すべての電話リンクボタンを取得
+      const phoneButtons = document.querySelectorAll('a[href^="tel:"]');
+      phoneButtons.forEach(function (button) {
+        // 強制的にクリックイベントを追加
+        button.addEventListener('click', function (e) {
+          // デフォルトの動作を許可（電話アプリを開く）
+          console.log('Calling:', this.href);
+          // ブラウザの標準動作に任せる
+          return true;
+        });
+        // タッチイベントも追加
+        button.addEventListener('touchstart', function (e) {
+          this.style.opacity = '0.8';
+          this.style.transform = 'scale(0.98)';
+        });
+        button.addEventListener('touchend', function (e) {
+          this.style.opacity = '1';
+          this.style.transform = 'scale(1)';
+        });
+      });
+      // すべてのボタンにタップ最適化を適用
+      const allButtons = document.querySelectorAll('.cta-button, .btn-primary, .btn-secondary, button');
+      allButtons.forEach(function (btn) {
+        btn.style.webkitTapHighlightColor = 'rgba(102, 126, 234, 0.3)';
+        btn.style.touchAction = 'manipulation';
+        btn.style.pointerEvents = 'auto';
+      });
+    });
+
+    // プライバシーポリシー表示
+    function showPrivacyPolicy() {
+      alert('プライバシーポリシー\n\nお客様の個人情報は適切に管理し、サービス提供目的以外では使用いたしません。詳細はお問い合わせください。');
+    }
+
+    // 利用規約表示
+    function showTerms() {
+      alert('利用規約\n\nサービス利用時の基本的な規約について。キャンセルポリシー等の詳細はお問い合わせ時にご説明いたします。');
+    }
+
+    let selectedRating = 0;
+
+    // 星評価の設定
+    function setRating(rating) {
+      selectedRating = rating;
+      const stars = document.querySelectorAll('.star');
+      stars.forEach((star, index) => {
+        if (index < rating) {
+          star.classList.add('active');
+        } else {
+          star.classList.remove('active');
+        }
+      });
+    }
+
+    // 口コミ投稿処理
+    function submitReview(event) {
+      event.preventDefault();
+      const name = document.getElementById('reviewName').value;
+      const title = document.getElementById('reviewTitle').value;
+      const text = document.getElementById('reviewText').value;
+      if (selectedRating === 0) {
+        alert('評価を選択してください。');
+        return;
+      }
+      // 新しい口コミカードを作成
+      const reviewsGrid = document.getElementById('reviewsGrid');
+      const newReviewCard = document.createElement('div');
+      newReviewCard.className = 'review-card new-review';
+      const stars = '⭐'.repeat(selectedRating);
+      const authorText = title ? `- ${name}（${title}）` : `- ${name}`;
+      newReviewCard.innerHTML = `
+<div class="review-stars">${stars}</div>
+<p class="review-text">"${text}"</p>
+<div class="review-author">${authorText}</div>
+<div style="font-size: 0.8rem; color: #999; margin-top: 0.5rem;">📅 投稿日: ${new Date().toLocaleDateString('ja-JP')}</div>
+`;
+      // 新しい口コミを最初に追加
+      reviewsGrid.insertBefore(newReviewCard, reviewsGrid.firstChild);
+      // フォームをクリア
+      clearForm();
+      // お礼メッセージを表示
+      const thankYouMessage = document.getElementById('thankYouMessage');
+      thankYouMessage.style.display = 'block';
+      // メールで管理者に通知
+      const mailtoLink = `mailto:takaya_3015@yahoo.co.jp?subject=新しい口コミが投稿されました&body=【新しい口コミ】%0A%0A投稿者: ${name}${title ? ` (${title})` : ''}%0A評価: ${stars}%0A内容: ${text}%0A投稿日時: ${new Date().toLocaleString('ja-JP')}`;
+      // 3秒後にお礼メッセージを非表示
+      setTimeout(() => {
+        thankYouMessage.style.display = 'none';
+      }, 5000);
+      // 投稿完了をアラートで通知
+      setTimeout(() => {
+        alert('口コミの投稿が完了しました！貴重なご意見をありがとうございます。');
+      }, 500);
+    }
+
+    // フォームクリア
+    function clearForm() {
+      document.getElementById('reviewName').value = '';
+      document.getElementById('reviewTitle').value = '';
+      document.getElementById('reviewText').value = '';
+      selectedRating = 0;
+      const stars = document.querySelectorAll('.star');
+      stars.forEach(star => {
+        star.classList.remove('active');
+      });
+    }
+
+    // ヘッダーのスクロール効果
+    window.addEventListener('scroll', function () {
+      const header = document.querySelector('.header');
+      if (window.scrollY > 100) {
+        header.style.background = 'rgba(255, 255, 255, 0.98)';
+        header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+      } else {
+        header.style.background = 'rgba(255, 255, 255, 0.95)';
+        header.style.boxShadow = 'none';
+      }
+    });
+  </script>
+
 </body>
+
 </html>
